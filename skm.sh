@@ -33,6 +33,9 @@ main() {
 		init)
 			init
 			;;
+		-h|--help)
+			echo_usage
+			;;
 		*)
 			echo_usage
 			exit 1
@@ -142,7 +145,22 @@ init(){
 }
 
 echo_usage(){
-	echo "test"
+	echo '
+NAME:
+   skm.sh - Manage your ssh keys.
+
+USAGE:
+   skm.sh [global options] command [command options] [arguments...]
+
+COMMANDS:
+   init       Move current SSH key to 
+   new        Create new SSH key
+   ls         Show keys
+   use        Switch SSH key
+
+GLOBAL OPTIONS:
+   --help, -h                show help (default: false)
+	'
 }
 
 main "${@}"
