@@ -4,7 +4,19 @@ set -e
 
 readonly COLOR='\033[0;35m'
 readonly NC='\033[0m'
-readonly SKM_DIR=${SKM_DIR:-$HOME/.skm}
+
+READLINK_CMD='readlink'
+if [[ $OSTYPE != 'darwin'* ]]; then
+	READLINK_CMD="${READLINK_CMD} -f"
+fi
+
+SKM_DIR=${SKM_DIR:-$HOME/.config/skm}
+mkdir -p $SKM_DIR
+
+LINKED_DIR=$($READLINK_CMD $SKM_DIR)
+if [ ! -z "$LINKED_DIR" ]; then
+	SKM_DIR=$LINKED_DIR
+fi
 
 main() {
 	if [ $# -eq 0 ]; then
@@ -44,11 +56,7 @@ main() {
 }
 
 current_key(){
-	cmd='readlink'
-	if [[ $OSTYPE != 'darwin'* ]]; then
-		cmd="${cmd} -f"
-	fi
-	basename $(dirname $($cmd ~/.ssh/id_rsa))
+	basename $(dirname $($READLINK_CMD ~/.ssh/id_rsa))
 }
 
 get_keys(){
